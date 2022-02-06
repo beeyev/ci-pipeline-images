@@ -12,7 +12,7 @@ ENV DEBCONF_NONINTERACTIVE_SEEN=true
 
 RUN set -eux \
     # Package Installation process
-    && apt-get update && apt-get install -yq \
+    && apt-get update && apt-get install --no-install-recommends -yq \
         git \
         tzdata \
         nano \
@@ -22,7 +22,9 @@ RUN set -eux \
         zip \
         make \
         python3 \
-        unzip
+        unzip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Easy installation of PHP extensions in official PHP Docker images
 # https://github.com/mlocati/docker-php-extension-installer
