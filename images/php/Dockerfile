@@ -1,4 +1,5 @@
-FROM php:8.1
+ARG BASE_IMAGE=latest
+FROM php:${BASE_IMAGE}
 
 ARG MAINTAINER="https://github.com/beeyev"
 LABEL maintainer="https://github.com/beeyev"
