@@ -15,17 +15,73 @@ on:
 jobs:
 
   build-PHP-8_1:
+    name: Build, test and publish
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [ '7.4', '8.0', '8.1' ]
+        include:
+          - version: 'latest'
+            flavor: ''
+            
     steps:
       - uses: actions/checkout@v2
         name: Check out code
-      - uses: mr-smithers-excellent/docker-build-push@v5
-        name: Build & push Docker image
+        
+      - name: log in to docker hub
+        uses: docker/login-action@v1
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/php-ci-pipline
-          tags: 8.1
-          registry: docker.io
-          dockerfile: images/php/Dockerfile
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build image and push to registry
+        uses: docker/build-push-action@v2
+        with:
+          platforms: linux/amd64
+          cache-from: type=registry,ref=beeyev/php-ci-pipline/php:${{ matrix.version }}
+          cache-to: type=inline
+          context: .
+          file: ./images/php/Dockerfile
+          build-args: |
+            BASE_IMAGE=${{ matrix.version }}
+          tags: beeyev/php-ci-pipline:${{ matrix.version }}${{ matrix.flavor }}
+          pull: true
+          push: true
+          
+#       - name: build and push the acng latest image
+#         uses: docker/build-push-action@v2
+#         with:
+#           context: .
+#           file: ./Dockerfile.bullseye
+#           platforms: linux/amd64
+#           pull: true
+#           push: true
+#           tags: mfontani/acng:latest
+#           build-args: BUILDKIT_INLINE_CACHE=1
+#           cache-from: mfontani/acng:latest
+          
+#       - uses: mr-smithers-excellent/docker-build-push@v5
+#         name: Build & push Docker image
+#         with:
+#           image: ${{ secrets.DOCKERHUB_USERNAME }}/php-ci-pipline
+#           tags: 8.1
+#           registry: docker.io
+#           dockerfile: images/php/Dockerfile
+#           username: ${{ secrets.DOCKERHUB_USERNAME }}
+#           password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+#   build-PHP-8_1:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#         name: Check out code
+#       - uses: mr-smithers-excellent/docker-build-push@v5
+#         name: Build & push Docker image
+#         with:
+#           image: ${{ secrets.DOCKERHUB_USERNAME }}/php-ci-pipline
+#           tags: 8.1
+#           registry: docker.io
+#           dockerfile: images/php/Dockerfile
+#           username: ${{ secrets.DOCKERHUB_USERNAME }}
+#           password: ${{ secrets.DOCKERHUB_TOKEN }}
   
