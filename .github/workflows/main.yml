@@ -17,6 +17,8 @@ jobs:
   build-PHP-8_1:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        name: Check out code
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
         with:
