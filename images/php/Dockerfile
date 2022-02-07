@@ -1,7 +1,6 @@
 ARG BASE_IMAGE=latest
 FROM php:${BASE_IMAGE}
 
-ARG MAINTAINER="https://github.com/beeyev"
 LABEL maintainer="https://github.com/beeyev"
 
 ENV TERM="xterm-256color"
@@ -127,12 +126,16 @@ RUN set -eux && \
     chmod +x /usr/local/bin/yaml-lint && yaml-lint -V > /dev/null 2>&1 && \
     #
     # ComposerRequireChecker | https://github.com/maglnet/ComposerRequireChecker
-    wget --no-check-certificate -q https://github.com/maglnet/ComposerRequireChecker/releases/latest/download/composer-require-checker.phar -O /usr/local/bin/composer-require-checker && \
-    chmod +x /usr/local/bin/composer-require-checker && composer-require-checker -V > /dev/null 2>&1
+    if [ `echo ${PHP_VERSION} | cut -c1-3` = "7.4" ]; then \
+        wget --no-check-certificate -q https://github.com/maglnet/ComposerRequireChecker/releases/download/3.8.0/composer-require-checker.phar -O /usr/local/bin/composer-require-checker \
+    ; else \
+        wget --no-check-certificate -q https://github.com/maglnet/ComposerRequireChecker/releases/latest/download/composer-require-checker.phar -O /usr/local/bin/composer-require-checker \
+    ; fi && \
+    chmod +x /usr/local/bin/composer-require-checker && composer-require-checker -V > /dev/null 2>&1 \
 
 RUN set -eux \
     && composer global require \
-        --no-progress --ignore-platform-reqs --optimize-autoloader --no-interaction --no-ansi --no-scripts \
+        --no-progress --optimize-autoloader --no-interaction --no-ansi --no-scripts \
         #
         # PHP VarDump Check (var-dump-check) | https://github.com/php-parallel-lint/PHP-Var-Dump-Check
         php-parallel-lint/php-var-dump-check \
@@ -160,6 +163,7 @@ RUN set -eux \
 COPY  ./etc/hello-msg.sh /etc/hello-msg.sh
 COPY  ./etc/.bashrc /root/.bashrc
 
+ARG MAINTAINER="https://github.com/beeyev"
 ENV CONTAINER_COPYRIGHT=${MAINTAINER}
 #Command bellow will be executed in motd via eval function, example: eval ${CONTAINER_HELLO_TEXT}
 ENV CONTAINER_HELLO_TEXT="printf \"PHP Version: \${cGreen}\${PHP_VERSION}\${cNo}\n\""

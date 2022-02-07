@@ -129,8 +129,12 @@ RUN set -eux && \
     chmod +x /usr/local/bin/yaml-lint && yaml-lint -V > /dev/null 2>&1 && \
     #
     # ComposerRequireChecker | https://github.com/maglnet/ComposerRequireChecker
-    wget --no-check-certificate -q https://github.com/maglnet/ComposerRequireChecker/releases/latest/download/composer-require-checker.phar -O /usr/local/bin/composer-require-checker && \
-    chmod +x /usr/local/bin/composer-require-checker && composer-require-checker -V > /dev/null 2>&1
+    if [ `echo ${PHP_VERSION} | cut -c1-3` = "7.4" ]; then \
+        wget --no-check-certificate -q https://github.com/maglnet/ComposerRequireChecker/releases/download/3.8.0/composer-require-checker.phar -O /usr/local/bin/composer-require-checker \
+    ; else \
+        wget --no-check-certificate -q https://github.com/maglnet/ComposerRequireChecker/releases/latest/download/composer-require-checker.phar -O /usr/local/bin/composer-require-checker \
+    ; fi && \
+    chmod +x /usr/local/bin/composer-require-checker && composer-require-checker -V > /dev/null 2>&1 \
 
 RUN set -eux \
     && composer global require \
