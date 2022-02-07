@@ -48,6 +48,8 @@ jobs:
           file: ./images/php/Dockerfile
           build-args: |
             BASE_IMAGE=${{ matrix.version }}
+            BUILD_DATE=$(TZ=":UTC" date +"%Y-%m-%d %H:%M:%S (%Z %z)")
+            BUILD_INFO=${GITHUB_SHA::7}
           tags: beeyev/php-ci-pipline:${{ matrix.version }}${{ matrix.flavor }}
           pull: true
           push: true
