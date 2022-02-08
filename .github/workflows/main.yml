@@ -25,6 +25,11 @@ jobs:
           - version: 'latest'
             
     steps:
+      - name: Prepare env variables
+        run: |
+          echo "BUILD_DATE=$(TZ=':UTC' date +'%Y-%m-%d %H:%M:%S (%Z %z)')" >> ${GITHUB_ENV}
+          echo "BUILD_INFO=${GITHUB_SHA::7}" >> ${GITHUB_ENV}
+
       - uses: actions/checkout@v2
         name: Check out code
           
@@ -47,8 +52,8 @@ jobs:
           file: ./images/php/Dockerfile
           build-args: |
             BASE_IMAGE=${{ matrix.version }}
-            BUILD_DATE=$(TZ=":UTC" date +"%Y-%m-%d %H:%M:%S (%Z %z)")
-            BUILD_INFO=${GITHUB_SHA::7}
+            BUILD_DATE=${{ env.BUILD_DATE }}
+            BUILD_INFO=${{ env.BUILD_INFO }}
           tags: beeyev/php-ci-pipline:${{ matrix.version }}
           pull: true
           push: true

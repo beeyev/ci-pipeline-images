@@ -159,6 +159,8 @@ RUN set -eux \
 
 COPY  ./etc/hello-msg.sh /etc/hello-msg.sh
 COPY  ./etc/.bashrc /root/.bashrc
+RUN set -eux && \
+    chmod +x /etc/hello-msg.sh
 
 ARG MAINTAINER="https://github.com/beeyev"
 ENV CONTAINER_COPYRIGHT=${MAINTAINER}
