@@ -23,7 +23,7 @@ printf "       \\\______${cWhite} o ${cGrayL}         __/\n"
 printf "         \\\    \\\        __/\n"
 printf "          \\\____\\\______/${cNo}\n"
 printf "\n"
-printf "Current datetime: ${cGreen}$(date '+%Y-%m-%d %H:%M (%Z)')${cNo}\n"
+printf "Current datetime: ${cGreen}$(date '+%Y-%m-%d %H:%M:%S (%Z)')${cNo}\n"
 printf "Image build date: ${cGreen}${BUILD_DATE}${cNo}\n"
 eval ${CONTAINER_HELLO_TEXT}
 printf "\n"
