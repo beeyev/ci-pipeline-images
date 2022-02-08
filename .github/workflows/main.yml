@@ -41,8 +41,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64
-          cache-from: type=gha, scope=${{ github.workflow }}-php-${{ matrix.version }}
-          cache-to: type=gha, scope=${{ github.workflow }}-php-${{ matrix.version }}, mode=max
+          cache-from: type=gha, scope=php-${{ matrix.version }}
+          cache-to: type=gha, scope=php-${{ matrix.version }}, mode=max
           context: .
           file: ./images/php/Dockerfile
           build-args: |
