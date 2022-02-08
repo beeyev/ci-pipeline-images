@@ -15,14 +15,18 @@ RUN set -eux \
     nano \
     curl \
     wget \
-    git \
     zip \
+    tar \
+    gzip \
+    bzip2 \
+    unzip \
     make \
     grep \
+    ca-certificates \
+    openssh-client \
     python3 \
     # `gnupg` is a dependency for `phive`
-    gnupg \
-    unzip
+    gnupg
 
 RUN set -eux \
     && cp "${PHP_INI_DIR}/php.ini-production" "${PHP_INI_DIR}/php.ini" \

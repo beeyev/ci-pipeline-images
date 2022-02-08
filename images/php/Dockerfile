@@ -16,12 +16,22 @@ RUN set -eux \
         git \
         nano \
         wget \
-        git \
         zip \
-        python3 \
+        tar \
+        gzip \
+        bzip2 \
         unzip \
+        ca-certificates \
+        openssh-client \
+        python3 \
+        # `gnupg` is a dependency for `phive`
+        gnupg \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN set -eux \
+    && cp "${PHP_INI_DIR}/php.ini-production" "${PHP_INI_DIR}/php.ini" \
+    && sed -i "s|;*memory_limit =.*|memory_limit = -1|i" "${PHP_INI_DIR}/php.ini"
 
 # Easy installation of PHP extensions in official PHP Docker images
 # https://github.com/mlocati/docker-php-extension-installer
