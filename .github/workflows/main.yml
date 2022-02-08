@@ -23,7 +23,6 @@ jobs:
         version: [ '7.4', '8.0', '8.1' ]
         include:
           - version: 'latest'
-            flavor: ''
             
     steps:
       - uses: actions/checkout@v2
@@ -42,15 +41,15 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64
-          cache-from: type=registry,ref=beeyev/php-ci-pipline/php:${{ matrix.version }}
-          cache-to: type=inline
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           context: .
           file: ./images/php/Dockerfile
           build-args: |
             BASE_IMAGE=${{ matrix.version }}
             BUILD_DATE=$(TZ=":UTC" date +"%Y-%m-%d %H:%M:%S (%Z %z)")
             BUILD_INFO=${GITHUB_SHA::7}
-          tags: beeyev/php-ci-pipline:${{ matrix.version }}${{ matrix.flavor }}
+          tags: beeyev/php-ci-pipline:${{ matrix.version }}
           pull: true
           push: true
           
