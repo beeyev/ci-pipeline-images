@@ -14,13 +14,10 @@ RUN set -eux \
     # Package Installation process
     && apt-get update && apt-get install --no-install-recommends -yq \
         git \
-        tzdata \
         nano \
-        curl \
         wget \
         git \
         zip \
-        make \
         python3 \
         unzip \
     && apt-get clean \
