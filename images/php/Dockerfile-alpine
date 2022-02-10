@@ -143,7 +143,7 @@ RUN set -eux && \
 
 RUN set -eux \
     && composer global require \
-        --no-progress --ignore-platform-reqs --optimize-autoloader --no-interaction --no-ansi --no-scripts \
+        --no-progress --optimize-autoloader --no-interaction --no-ansi --no-scripts \
         #
         # PHP VarDump Check (var-dump-check) | https://github.com/php-parallel-lint/PHP-Var-Dump-Check
         php-parallel-lint/php-var-dump-check \
