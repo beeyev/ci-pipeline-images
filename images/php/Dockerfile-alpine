@@ -1,5 +1,5 @@
 ARG BASE_IMAGE=latest
-FROM php:${BASE_IMAGE}-alpine
+FROM php:${BASE_IMAGE}
 
 ARG MAINTAINER="https://github.com/beeyev"
 LABEL maintainer="https://github.com/beeyev"
