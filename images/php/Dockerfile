@@ -24,6 +24,7 @@ RUN set -eux \
         ca-certificates \
         openssh-client \
         python3 \
+        jq \
         # `gnupg` is a dependency for `phive`
         gnupg \
     && apt-get clean \
