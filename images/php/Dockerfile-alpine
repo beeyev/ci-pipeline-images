@@ -27,6 +27,7 @@ RUN set -eux \
     openssh-client \
     python3 \
     jq \
+    ncurses \
     # `gnupg` is a dependency for `phive`
     gnupg
 

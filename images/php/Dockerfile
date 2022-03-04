@@ -25,6 +25,7 @@ RUN set -eux \
         openssh-client \
         python3 \
         jq \
+        libncurses-dev \
         # `gnupg` is a dependency for `phive`
         gnupg \
     && apt-get clean \
