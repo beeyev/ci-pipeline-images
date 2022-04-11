@@ -1,11 +1,17 @@
 ARG BASE_IMAGE=latest
 FROM php:${BASE_IMAGE}
 
-LABEL maintainer="https://github.com/beeyev"
+ENV TERM="xterm-256color" \
+LANGUAGE="en_US.UTF-8" \
+LANG="en_US.UTF-8" \
+LC_TIME="en_GB.UTF-8"
 
-ENV TERM="xterm-256color"
 ENV COMPOSER_ALLOW_SUPERUSER=1
-ENV PATH ${PATH}:/root/.composer/vendor/bin:/var/www/html/vendor/bin
+ENV PATH ${PATH}:/root/.composer/vendor/bin:/app/vendor/bin
+
+# https://getcomposer.org/doc/06-config.md#allow-plugins
+COPY ./etc/composer-allow-plugins.json /root/.composer/composer.json
+COPY ./etc/composer-allow-plugins.json /opt/composer-allow-plugins.json.example
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN=true
@@ -145,32 +151,32 @@ RUN set -eux && \
     ; else \
         wget --no-check-certificate -q https://github.com/maglnet/ComposerRequireChecker/releases/latest/download/composer-require-checker.phar -O /usr/local/bin/composer-require-checker \
     ; fi && \
-    chmod +x /usr/local/bin/composer-require-checker && composer-require-checker -V > /dev/null \
+    chmod +x /usr/local/bin/composer-require-checker && composer-require-checker -V > /dev/null
 
 RUN set -eux \
     && composer global require \
         --no-progress --optimize-autoloader --no-interaction --no-ansi --no-scripts \
         #
         # PHP VarDump Check (var-dump-check) | https://github.com/php-parallel-lint/PHP-Var-Dump-Check
-        php-parallel-lint/php-var-dump-check \
+        php-parallel-lint/php-var-dump-check:* \
         #
         # PHP Magic Number Detector (PHPMND) | https://github.com/povils/phpmnd
-        povils/phpmnd \
+        povils/phpmnd:* \
         #
         # PHP Depend | https://github.com/pdepend/pdepend
-        pdepend/pdepend \
+        pdepend/pdepend:* \
         #
         # PHP Insights | https://github.com/nunomaduro/phpinsights
-        nunomaduro/phpinsights \
+        nunomaduro/phpinsights:* \
         #
         # PhpDeprecationDetector (phpdd) | https://github.com/wapmorgan/PhpDeprecationDetector
-        wapmorgan/php-deprecation-detector \
+        wapmorgan/php-deprecation-detector:* \
         #
         # PHPLint | https://github.com/overtrue/phplint \
-        overtrue/phplint \
+        overtrue/phplint:* \
         #
         # Rector | https://github.com/rectorphp/rector \
-        rector/rector \
+        rector/rector:* \
     # test composer executables
     && var-dump-check -V > /dev/null && phpmnd -V > /dev/null && phpinsights -V > /dev/null && phpdd -V > /dev/null && phplint -V > /dev/null && rector -V > /dev/null
 
@@ -189,4 +195,4 @@ ENV BUILD_DATE=${BUILD_DATE}
 ARG BUILD_INFO
 ENV BUILD_INFO=${BUILD_INFO}
 
-WORKDIR /var/www/html
+WORKDIR /app
