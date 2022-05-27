@@ -51,6 +51,7 @@ RUN set -eux && chmod +x /usr/local/bin/install-php-extensions \
         pdo_mysql \
         pgsql \
         pdo_pgsql \
+        redis-stable \
         mcrypt \
         ast-stable
 

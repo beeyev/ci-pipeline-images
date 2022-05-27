@@ -1,5 +1,7 @@
 {
    "config":{
-      "allow-plugins":true
+      "allow-plugins":true,
+      "optimize-autoloader": true,
+      "sort-packages": true
    }
 }
